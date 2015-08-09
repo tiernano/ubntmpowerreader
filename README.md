@@ -1,4 +1,4 @@
-# ubntmpowerreader
+# UBNT MPower Reader
 read the power data from your Ubiquiti Networks MPower device using C#
 
 ##What is it
