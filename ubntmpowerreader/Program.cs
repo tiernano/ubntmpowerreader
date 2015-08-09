@@ -18,11 +18,12 @@ namespace ubntmpowerreader
             foreach (string server in servers.Split(','))
             {
                 ConnectionInfo ConnNfo = new ConnectionInfo(server, 22, username,
-                new AuthenticationMethod[]{
-                // Pasword based Authentication
-                new PasswordAuthenticationMethod(username,password)
-                }
-                );
+                    new AuthenticationMethod[]{
+                        // Pasword based Authentication
+                        new PasswordAuthenticationMethod(username,password)
+                    }
+                    );
+
                 string[] items = { "active_pwr", "energy_sum", "v_rms", "pf","enabled" };
 
                 using (var sshclient = new SshClient(ConnNfo))
