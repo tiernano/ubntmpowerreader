@@ -23,7 +23,7 @@ namespace ubntmpowerreader
                 new PasswordAuthenticationMethod(username,password)
                 }
                 );
-                string[] items = { "active_pwr", "energy_sum" };
+                string[] items = { "active_pwr", "energy_sum", "v_rms", "pf","enabled" };
 
                 using (var sshclient = new SshClient(ConnNfo))
                 {
