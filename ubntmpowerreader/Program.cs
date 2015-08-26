@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,18 +32,33 @@ namespace ubntmpowerreader
                     Console.WriteLine("Connecting to {0}", server);
                     sshclient.Connect();
                     // quick way to use ist, but not best practice - SshCommand is not Disposed, ExitStatus not checked...
-                    foreach (string s in items)
+                    foreach (string itemName in items)
                     {
-                        for (int i = 1; i < 7; i++)
+                        for (int port = 1; port < 7; port++)
                         {
-                            Console.WriteLine(string.Format("{0}{1}", s, i));
-                            Console.WriteLine(sshclient.CreateCommand(string.Format("cd /proc/power && cat {0}{1}", s, i)).Execute());
+                            string outputFileName = string.Format("{0}-{1}-{2}.txt", server, itemName, port);
+                            Console.WriteLine(string.Format("{0}{1}", itemName, port));
+                            string result = sshclient.CreateCommand(string.Format("cat /proc/power/{0}{1}", itemName, port)).Execute();
+                            if (!File.Exists(outputFileName))
+                            {
+                                using (var writer = File.CreateText(outputFileName))
+                                {
+                                    writer.WriteLine(string.Format("{0}, {1}", DateTime.Now.Ticks, result));
+                                }
+                            }
+                            else
+                            {
+                                using (var writer = File.AppendText(outputFileName))
+                                {
+                                    writer.WriteLine(string.Format("{0}, {1}", DateTime.Now.Ticks, result));
+                                }
+                            }
+                            Console.WriteLine(result);
                         }
                     }
                     sshclient.Disconnect();
                 }
             }
-            Console.ReadLine();
         }
     }
 }
